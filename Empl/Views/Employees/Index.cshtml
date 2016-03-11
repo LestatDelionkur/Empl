@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Список сотрудников";
+}
+
+<h2>Список сотрудников</h2>
+
+<div ng-app="emplApp">
+    <div ng-controller="EmployeeCtrl">
+        <table st-set-filter="customFilter"   st-table="displayed" st-safe-src="collection" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th st-sort="Name">Имя</th>
+                    <th st-sort="Date">Дата</th>
+                    <th st-sort="EmployeeType.Title">Должность</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <input placeholder="Поиск по имени" st-search="Name" />
+                    </th>              
+                    <th>
+                        <st-date-range predicate="Date" before="query.before" after="query.after"></st-date-range>
+                    </th>
+                    <th>
+                        <input placeholder="Поиск по дате" st-search="EmployeeType.Title" />
+                    </th>
+                    <th>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="element in displayed">
+                    <td>{{element.Name}}</td>
+                    <td>{{element.Date|date}}</td>
+                    <td>{{element.EmployeeType.Title}}</td>
+                    <td><button>Изменить</button></td>
+                </tr>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+@Scripts.Render("~/bundles/angular")
+@Scripts.Render("~/bundles/angularui")
+@Scripts.Render("~/bundles/controllers")

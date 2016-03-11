@@ -23,6 +23,17 @@ namespace Empl
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                 "~/Scripts/angular.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers")
+                .Include("~/Scripts/ng/controllers.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularui").Include(
+                  //  "~/Scripts/angular-ui/ui-bootstrap.js",
+"~/Scripts/angular-ui/ui-bootstrap-tpls.js",
+                    "~/Scripts/smart-table.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
