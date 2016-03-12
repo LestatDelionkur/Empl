@@ -21,7 +21,7 @@
             };
 
             $scope.LoadEmployeeTypes = function () {
-                $http.get("EmployeeTypeList").success(function (data) {
+                $http.get("/Employees/EmployeeTypeList").success(function (data) {
                     var list = data.map(function (item) {
                         return item.Title;
                     });
@@ -31,7 +31,7 @@
             }
 
             $scope.LoadEmployees = function () {
-                $http.get("EmployeeList").success(function (data) {
+                $http.get("/Employees/EmployeeList").success(function (data) {
                     $scope.collection = data;
                     $scope.collection.forEach(function (item, ind) {
                         item.Date = $scope.GetDate(item.Date);
@@ -83,7 +83,7 @@
                     var conf = {
                         withCredentials: true
                     };
-                    $http.post("Delete", { id: employee.EmployeeId }, conf).success(function (data) {
+                    $http.post("/Employees/Delete", { id: employee.EmployeeId }, conf).success(function (data) {
                         $scope.collection.splice(index, 1);
                     });
                     
@@ -97,7 +97,7 @@
                     withCredentials: true
                 };
 
-                $http.post("Edit", { employee: employee }, conf).success(function (data) {
+                $http.post("/Employees/Edit", { employee: employee }, conf).success(function (data) {
                     var item = data;
                     item.Date = $scope.GetDate(item.Date);
                     $scope.RefreshItemView(item);
