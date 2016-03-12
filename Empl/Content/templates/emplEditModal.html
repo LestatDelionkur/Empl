@@ -1,0 +1,56 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{selected.EmployeeId?'Редактирование сотрудника':'Добавление сотрудника'}}</h3>
+</div>
+<div class="modal-body" style="height: 300px;">
+
+    <form role="form" name="editEmployeeForm" novalidate>
+        <div class="form-group col-lg-8 col-md-8 col-sm-8  col-xs-8" ng-class="{ 'has-error' : editEmployeeForm.Name.$invalid && !editEmployeeForm.Name.$pristine }">
+            <label for="Name" class="col-md-12  col-lg-12 col-sm-12">Имя</label>
+            <div class="input-group  col-md-10  col-lg-10 col-sm-10">
+                <input type="text" class="form-control" name="Name" id="Name" placeholder="Введите ФИО" required ng-model="selected.Name">
+
+            </div>
+            <p ng-show="editEmployeeForm.Name.$invalid && !editEmployeeForm.Name.$pristine" class="help-block">Обязательное поле</p>
+        </div>
+
+        <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-8" ng-class="{ 'has-error' : editEmployeeForm.Date.$invalid && !editEmployeeForm.Date.$pristine }">
+            <label for="Date" class="col-md-12 col-lg-12 col-sm-12">Дата приема</label>
+            <div class="input-group  col-md-10  col-lg-10 col-sm-10 col-xs-10">
+                <input type="text" class="form-control" name="Date" id="Date" placeholder="дд.ММ.гггг" uib-datepicker-popup="dd.MM.yyyy" ng-model="selected.Date" required is-open="isDateOpen"
+                       close-text="Закрыть" current-text="Сегодня" clear-text="Очистить"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openDate($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+            <p ng-show="editEmployeeForm.Date.$invalid && !editEmployeeForm.Date.$pristine" class="help-block">Обязательное поле</p>
+        </div>
+        
+        <div class="form-group col-lg-8 col-md-8 col-sm-8  col-xs-8" ng-class="{ 'has-error' : !selected.EmployeeType.EmployeeTypeId && !editEmployeeForm.EmployeeType.$pristine }">
+            <label for="EmployeeType" class="col-md-12 col-lg-12 col-sm-12">Должность</label>
+            <div class="input-group  col-md-10  col-lg-10 col-sm-10">
+                <select name="EmployeeType" id="EmployeeType" class="form-control" ng-model="selected.EmployeeType" required ng-options="value as value.Title  for value in items track by value.EmployeeTypeId">
+                    <option>--</option>
+                </select>
+            </div>
+            <p ng-show="!selected.EmployeeType.EmployeeTypeId&& !editEmployeeForm.EmployeeType.$pristine" class="help-block">Обязательное поле</p>
+        </div>
+
+    </form>
+
+   
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">Добавить</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Отмена</button>
+</div>
+
+
+
+
+
+
+
+
+

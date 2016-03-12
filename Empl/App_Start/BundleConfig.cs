@@ -24,18 +24,20 @@ namespace Empl
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                 "~/Scripts/angular.js"));
+                 "~/Scripts/angular.js", "~/Scripts/i18n/angular-locale_ru-ru.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers")
                 .Include("~/Scripts/ng/controllers.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularui").Include(
-                  //  "~/Scripts/angular-ui/ui-bootstrap.js",
+//  "~/Scripts/angular-ui/ui-bootstrap.js",
+"~/Scripts/angular-animate.js",
 "~/Scripts/angular-ui/ui-bootstrap-tpls.js",
                     "~/Scripts/smart-table.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/ui-bootstrap-csp.css",
                       "~/Content/site.css"));
         }
     }

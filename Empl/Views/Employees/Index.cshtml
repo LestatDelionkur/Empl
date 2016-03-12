@@ -3,41 +3,73 @@
 }
 
 <h2>Список сотрудников</h2>
+<script>
+    @functions{
+        public string TokenHeaderValue()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+
+    var token = '@TokenHeaderValue()';
+   
+</script>
 
 <div ng-app="emplApp">
     <div ng-controller="EmployeeCtrl">
-        <table st-set-filter="customFilter"   st-table="displayed" st-safe-src="collection" class="table table-bordered table-striped">
+        <table st-set-filter="customFilter" st-table="displayed" st-safe-src="collection" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th st-sort="Name">Имя</th>
-                    <th st-sort="Date">Дата</th>
-                    <th st-sort="EmployeeType.Title">Должность</th>
+                    <th colspan="4">
+                        <input placeholder="Поиск" st-search="" class="form-control" style="display: inline-block"/>
+                        <button class="btn btn-info btn-sm"  ng-click="isCollapsed = !isCollapsed"><i class="glyphicon glyphicon-filter" ></i></button>
+                    </th>
+                </tr>
+                <tr uib-collapse="isCollapsed" expanded="ExpandFilter()" collapsed="CollapseFilter()" class="filter-row" >
+                    <th colspan="1">
+                        <input placeholder="Поиск по имени" st-search="Name"  class="form-control"/>
+                    </th>
+                    <th class="col-lg-3 col-md-3" colspan="1">
+                        <st-date-range predicate="Date" before="query.before" after="query.after" ></st-date-range>
+                    </th>
+                    <th colspan="1">
+                        <st-select-filter collection="employeeTypes" predicate="EmployeeType.Title"></st-select-filter>
+                    </th>
                     <th></th>
                 </tr>
                 <tr>
-                    <th>
-                        <input placeholder="Поиск по имени" st-search="Name" />
-                    </th>              
-                    <th>
-                        <st-date-range predicate="Date" before="query.before" after="query.after"></st-date-range>
-                    </th>
-                    <th>
-                        <input placeholder="Поиск по дате" st-search="EmployeeType.Title" />
-                    </th>
-                    <th>
-                        
+                    <th st-sort="Name" colspan="1">Имя</th>
+                    <th st-sort="Date" colspan="1">Дата</th>
+                    <th st-sort="EmployeeType.Title" colspan="1">Должность</th>
+                    <th colspan="1">
+                        <button class="btn btn-success btn-sm" ng-click="openModal('md')"><i class="glyphicon glyphicon-plus"></i></button>
                     </th>
                 </tr>
+
             </thead>
             <tbody>
-                <tr ng-repeat="element in displayed">
+                <tr ng-repeat="element in displayed" data-id="{{element.EmployeeId}}">
                     <td>{{element.Name}}</td>
                     <td>{{element.Date|date}}</td>
                     <td>{{element.EmployeeType.Title}}</td>
-                    <td><button>Изменить</button></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" ng-click="openModal('md',element)">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </button> <button class="btn btn-sm btn-danger" ng-click="RemoveItem(element)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
-            <tfoot></tfoot>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <div st-items-by-page="10" st-pagination="" st-template="/Content/templates/Pagination.html"></div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

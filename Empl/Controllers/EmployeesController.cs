@@ -16,7 +16,7 @@ namespace Empl.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Employees
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
 
             return View();
@@ -24,17 +24,10 @@ namespace Empl.Controllers
 
         public async Task<ActionResult> EmployeeList()
         {
+
             var employees = await db.Employees.Include(e => e.EmployeeType).ToListAsync();
-            var list = employees.Select(
-                e =>
-                new
-                {
-                    EmployeeID = e.EmployeeId,
-                    Name = e.Name,
-                    Date = e.Date.ToString("d.MM.yyyy"),
-                    EmployeeType = e.EmployeeType
-                });
-            return Json(list, JsonRequestBehavior.AllowGet);
+           
+            return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> EmployeeTypeList()
@@ -104,17 +97,29 @@ namespace Empl.Controllers
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "EmployeeId,Name,Date,EmployeeTypeId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
+                if (employee.EmployeeId != 0)
+                {
+                    db.Entry(employee).State = EntityState.Modified;
+                }
+                else
+                {
+                    db.Employees.Add(employee);
+                }
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                Employee result = await db.Employees.Include(X=>X.EmployeeType).FirstOrDefaultAsync(X=>X.EmployeeId==employee.EmployeeId);
+                if (result == null)
+                {
+                    return HttpNotFound();
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
-            ViewBag.EmployeeTypeId = new SelectList(db.EmployeeTypes, "EmployeeTypeId", "Title", employee.EmployeeTypeId);
-            return View(employee);
+          
+            return HttpNotFound();
         }
 
         // GET: Employees/Delete/5
@@ -134,7 +139,7 @@ namespace Empl.Controllers
 
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
             Employee employee = await db.Employees.FindAsync(id);

@@ -75,3 +75,7 @@
 [uib-typeahead-popup].dropdown-menu {
   display: block;
 }
+
+.uib-datepicker-popup td {
+    padding: 1px!important;
+}
